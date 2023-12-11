@@ -33,8 +33,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const orderStatus = {
   0: '待支付',
   1: '已支付',
-  2: '配货完成',
-  3: '出库成功',
+  2: '已出库',
+  3: '已收货',
   4: '交易成功',
   '-1': '手动关闭',
   '-2': '超时关闭',
@@ -56,7 +56,7 @@ app.config.globalProperties.$filters = {
     if (url && url.startsWith('http')) {
       return url
     } else {
-      url = `http://backend-api-02.newbee.ltd${url}`
+      url = `http://192.168.0.200:28019${url}`
       return url
     }
   }

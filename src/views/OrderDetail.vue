@@ -82,7 +82,7 @@ onMounted(() => {
   axios.get(`/orders/${id}`).then(res => {
     console.log(res)
     state.data = res
-    state.tableData = res.newBeeMallOrderItemVOS
+    state.tableData = res.mallOrderItemVOS
   })
 })
 </script>

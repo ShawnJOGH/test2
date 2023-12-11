@@ -41,7 +41,7 @@
             :before-upload="handleBeforeUpload"
             :on-success="handleUrlSuccess"
           >
-            <img style="width: 100px; height: 100px; border: 1px solid #e9e9e9;" v-if="state.goodForm.goodsCoverImg" :src="state.goodForm.goodsCoverImg" class="avatar">
+            <img style="width: 100px; height: 100px; border: 1px solid #e9e9e9;" v-if="state.goodForm.goodsCoverImg" :src="$filters.prefix(state.goodForm.goodsCoverImg)" class="avatar">
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
@@ -129,7 +129,7 @@ onMounted(() => {
   instance.config.showLinkImg = false
   instance.config.showLinkImgAlt = false
   instance.config.showLinkImgHref = false
-  instance.config.uploadImgMaxSize = 2 * 1024 * 1024 // 2M
+  // instance.config.uploadImgMaxSize = 2 * 1024 * 1024 // 2M
   instance.config.uploadFileName = 'file'
   instance.config.uploadImgHeaders = {
     token: state.token
@@ -164,7 +164,7 @@ onMounted(() => {
         sellingPrice: goods.sellingPrice,
         stockNum: goods.stockNum,
         goodsSellStatus: String(goods.goodsSellStatus),
-        goodsCoverImg: proxy.$filters.prefix(goods.goodsCoverImg),
+        goodsCoverImg: goods.goodsCoverImg,
         tag: goods.tag
       }
       state.categoryId = goods.goodsCategoryId

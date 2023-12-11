@@ -5,13 +5,9 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/introduce'
+      redirect: '/dashboard'
     },
-    {
-      path: '/introduce',
-      name: 'introduce',
-      component: () => import(/* webpackChunkName: "introduce" */ '../views/Introduce.vue')
-    },
+
     {
       path: '/dashboard',
       name: 'dashboard',
@@ -88,7 +84,21 @@ const router = createRouter({
       path: '/account',
       name: 'account',
       component: () => import(/* webpackChunkName: "account" */ '../views/Account.vue')
+    },{
+      path: '/shops',
+      name: 'shops',
+      component: () => import(/* webpackChunkName: "account" */ '../views/ShopInformation.vue')
     }
+    ,{
+      path: '/complaints',
+      name: 'complaints',
+      component: () => import(/* webpackChunkName: "account" */ '../views/ShopComplaint.vue')
+    },
+    {
+      path: '/comment',
+      name: 'comment',
+      component: () => import(/* webpackChunkName: "order_detail" */ '../views/Comment.vue')
+    },
   ]
 })
 

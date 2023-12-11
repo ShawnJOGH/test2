@@ -22,13 +22,12 @@ export function hasEmoji (str = '') {
 }
 
 // 单张图片上传
-export const uploadImgServer = 'http://backend-api-02.newbee.ltd/manage-api/v1/upload/file'
+export const uploadImgServer = 'http://127.0.0.1:28019/manage-api/v1/upload/file'
 // 多张图片上传
-export const uploadImgsServer = 'http://backend-api-02.newbee.ltd/manage-api/v1/upload/files'
+export const uploadImgsServer = 'http://127.0.0.1:28019/manage-api/v1/upload/files'
 
 export const pathMap = {
   login: '登录',
-  introduce: '系统介绍',
   dashboard: '大盘数据',
   add: '添加商品',
   swiper: '轮播图配置',
@@ -42,5 +41,8 @@ export const pathMap = {
   guest: '会员管理',
   order: '订单管理',
   order_detail: '订单详情',
-  account: '修改账户'
+  account: '修改账户',
+  shops:"店铺管理",
+  complaints:"店铺投诉",
+  comment:'评论信息',
 }

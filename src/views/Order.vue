@@ -18,9 +18,9 @@
           />
         </el-select>
         <!-- <el-button type="primary" size="small" icon="el-icon-edit">修改订单</el-button> -->
-        <el-button type="primary" :icon="HomeFilled" @click="handleConfig()">配货完成</el-button>
-        <el-button type="primary" :icon="HomeFilled" @click="handleSend()">出库</el-button>
-        <el-button type="danger" :icon="Delete" @click="handleClose()">关闭订单</el-button>
+<!--        <el-button type="primary" :icon="HomeFilled" @click="handleConfig()">配货完成</el-button>-->
+<!--        <el-button type="primary" :icon="HomeFilled" @click="handleSend()">出库</el-button>-->
+<!--        <el-button type="danger" :icon="Delete" @click="handleClose()">关闭订单</el-button>-->
       </div>
     </template>
     <el-table
@@ -29,10 +29,7 @@
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
+
       <el-table-column
         prop="orderNo"
         label="订单号"
@@ -70,19 +67,19 @@
         label="操作"
       >
         <template #default="scope">
+<!--          <el-popconfirm-->
+<!--            v-if="scope.row.orderStatus == 1"-->
+<!--            title="确定配货完成吗？"-->
+<!--            @confirm="handleConfig(scope.row.orderId)"-->
+<!--            confirm-button-text="确定"-->
+<!--            cancel-button-text="取消"-->
+<!--          >-->
+<!--            <template #reference>-->
+<!--              <a style="cursor: pointer; margin-right: 10px">配货完成</a>-->
+<!--            </template>-->
+<!--          </el-popconfirm>-->
           <el-popconfirm
             v-if="scope.row.orderStatus == 1"
-            title="确定配货完成吗？"
-            @confirm="handleConfig(scope.row.orderId)"
-            confirm-button-text="确定"
-            cancel-button-text="取消"
-          >
-            <template #reference>
-              <a style="cursor: pointer; margin-right: 10px">配货完成</a>
-            </template>
-          </el-popconfirm>
-          <el-popconfirm
-            v-if="scope.row.orderStatus == 2"
             title="确定出库吗？"
             @confirm="handleSend(scope.row.orderId)"
             confirm-button-text="确定"
@@ -107,6 +104,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog v-model="state.dialogFormVisible" title="出库">
+      <el-form :model="state">
+        <el-form-item label="请输入物流单号" :label-width="formLabelWidth">
+          <el-input v-model="state.currentWlno" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="state.dialogFormVisible = false">取消出库</el-button>
+        <el-button type="primary" @click="confirmSend()">
+          确认出库
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
     <el-pagination
       background
       layout="prev, pager, next"
@@ -119,12 +131,15 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { HomeFilled, Delete } from '@element-plus/icons-vue'
 import axios from '@/utils/axios'
 
 const state = reactive({
+  dialogFormVisible:false,
+  currentId:'',
+  currentWlno:'',
   loading: false,
   tableData: [], // 数据列表
   multipleSelection: [], // 选中项
@@ -145,7 +160,7 @@ const state = reactive({
     label: '已支付'
   }, {
     value: 2,
-    label: '配货完成'
+    label: '已支付'
   }, {
     value: 3,
     label: '出库成功'
@@ -220,23 +235,28 @@ const handleConfig = (id) => {
     getOrderList()
   })
 }
+
+const handleSend =(id) => {
+  state.currentId = id
+  state.dialogFormVisible = true
+}
+
 // 出库方法
-const handleSend = (id) => {
+const confirmSend = () => {
   let params
-  if (id) {
-    params = [id]
+  // 当个配置
+  if (state.currentWlno) {
+    params = [state.currentId, state.currentWlno]
   } else {
-    if (!state.multipleSelection.length) {
-      ElMessage.error('请选择项')
-      return
-    }
-    params = state.multipleSelection.map(i => i.orderId)
+    ElMessage.error('请输入物流单号')
+    return
   }
   axios.put('/orders/checkOut', {
-    ids: params
+    wlxx: params
   }).then(() => {
     ElMessage.success('出库成功')
     getOrderList()
+    state.dialogFormVisible = false
   })
 }
 // 关闭订单方法
